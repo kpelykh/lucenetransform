@@ -11,7 +11,6 @@ Here is the example how to open compressed index
 {{{
          Directory bdir = FSDirectory.open(new File("data/test/clucene"));
          Directory cdir = new CompressedIndexDirectory(bdir);
-         TestLucene(cdir, count, "compressed");
 }}}
 
 After successful open, IndexWriter/IndexReader can be created:
