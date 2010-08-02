@@ -1,0 +1,13 @@
+#summary Implementation
+#labels Phase-Design
+
+= Introduction =
+
+In Lucene compression can be achieved by compressing fields. The problem is, that those fields are not indexed and thus not searchable. Big part of index consists  of words (text),that can be easily compressed. Therefore compression has to be implemented on 
+storage (directory) level, where whole index can be compressed.
+
+This library utilizes pluggable architecture of Lucene directory and creates transparent layer, that enables compression and as side result also other trasformations. 
+
+The main problem with compression is, that size (and position) of the data changes, thus changing data requires reallocation (recompression) of all subsequent data. Therefore file is sliced into fixed size chunks. Each chunk has information about original position, compressed (transformed) size, original size, and for safety CRC of original data.
+
+Chunks are always appended (no overwrite). If there is seek operation on already written position, chunk is appended with starting position of seek, thereby generating log structured file (only append). When reading data, every location (chunk) is checked for possible overwrites and merged into final data content of file.
