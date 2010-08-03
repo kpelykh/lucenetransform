@@ -13,7 +13,7 @@ By default block site is set to 128KB and sequential log based writing. This set
 
 ==Simple benchmark==
 
-I've made small benchmark based on test case. For each method 20000 documents are inserted into index. Every 10000 documents are separately commited to create multiple segments, then index is optimized  and searched 10000 times. Search results (always two) are retrieved. All measurements are in milliseconds, except size, which is in bytes.
+I've made small benchmark based on test case. For each method 20000 documents are inserted into index. Every 10000 documents are separately committed to create multiple segments, then index is optimized  and searched 10000 times. Search results (always two) are retrieved. All measurements are in milliseconds, except size, which is in bytes.
 
 Method description:
   * lucene - lucene without transformation directory
@@ -23,7 +23,7 @@ Method description:
   * AES CBC encrypted - transparent encryption with AES CBC (128-bits)
   * Compressed AES CBC encrypted - transparent compression with AES CBC (128-bits) encryption
 
-All operations were repeated 31 times. Data from first run is omitted from statistics. All files were created on ramfs filesystem. There is also [larger test] with real disk IO and 4000000 documents.
+All operations were repeated 31 times. Data from first run is omitted from statistics. All files were created on ramfs filesystem. There is also [large_test test] with real disk IO and 4000000 documents.
 
 ===Notes==
 Size can vary of chunked index can vary, dependent on content of data, since CRC is written with writeVLong(). 
