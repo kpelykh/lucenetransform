@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Larger experiment setup
 =Larger experiment=
 The experiment setup is the same as in [Performance performance test], except there are now 4.000.000 documents in index and 10.000 search operations are performed in batch search. For the storage, hard disk drive is used instead of ramfs, and there is not enough cache to hold 800M file data (during merge operations). For that reason randomness (delays) in disk access has important role, even more if disk drive is slow (like in this case), therefore uncertainties are very high, Test was performed on laptop and not on heavy duty server.
 
