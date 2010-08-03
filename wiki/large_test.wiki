@@ -1,0 +1,10 @@
+#summary One-sentence summary of this page.
+=Larger experiment=
+The experiment setup is the same as in [Performance performance test], except there are now 4.000.000 documents in index and 10.000 search operations are performed in batch search. For the storage, hard disk drive is used instead of ramfs, and there is not enough cache to hold 800M file data (during merge operations). For that reason randomness (delays) in disk access has important role, even more if disk drive is slow (like in this case), therefore uncertainties are very high, Test was performed on laptop and not on heavy duty server.
+
+Log based 128k chunk
+
+||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
+||lucene||59,27+/-32,30||91233,07+/-1658,63||49818,33+/-7353,44||5027,60+/-2715,92||27,57+/-39,33||24,10+/-26,95||1305,60+/-1319,92||2,70+/-14,41||387247316,00+/-0,00||
+||compressed||180,67+/-51,77||108953,83+/-947,15||52533,63+/-315,59||1246,40+/-86,39||18,07+/-11,59||32,77+/-15,78||1735,33+/-122,19||0,07+/-0,25||35333906,43+/-1,83||
+||compressed/lucene||304,82%+/-253,45%||119,42%+/-3,00%||105,45%+/-16,19%||24,79%+/-15,10%||65,54%+/-184,69%||135,97%+/-217,52%||132,91%+/-143,72%||2,59%+/-23,07%||9,12%+/-0,00%||
