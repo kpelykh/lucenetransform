@@ -32,99 +32,30 @@ Bulk searching for 10000 times and loading documents, spends most of the time in
 
 The purpose of this benchmark is to show possible impact of various parameters. For optimal results, create tests on expected load.
 
-==Log based writing==
 
-Large chunk size (128k)
-
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||1,10+/-0,31||302,33+/-14,45||110,43+/-4,56||1,17+/-0,53||0,37+/-0,49||0,13+/-0,35||126,67+/-4,95||0,07+/-0,25||1788158,00+/-0,00||
-||lucene null||1,80+/-1,10||326,53+/-27,81||139,70+/-5,98||1,60+/-0,56||4,33+/-1,49||1,10+/-0,48||1901,20+/-59,80||0,17+/-0,46||1788764,93+/-0,25||
-||compressed||1,90+/-0,55||455,23+/-95,79||278,77+/-12,20||1,60+/-2,19||7,00+/-9,28||1,57+/-0,50||1916,53+/-72,20||0,13+/-0,35||183095,13+/-2,01||
-||AES encrypted||4,23+/-0,50||448,80+/-21,12||297,53+/-11,64||1,40+/-0,50||19,00+/-3,45||4,23+/-0,43||1891,03+/-105,95||0,03+/-0,18||1789130,90+/-0,31||
-||AES CBC encrypted||4,63+/-1,65||468,27+/-20,55||314,07+/-15,43||1,30+/-0,47||20,47+/-3,66||4,93+/-0,83||1887,10+/-72,74||0,07+/-0,25||1789230,00+/-0,00||
-||Compressed AES CBC encrypted||4,70+/-0,47||1009,83+/-33,50||1106,97+/-30,96||1,63+/-0,49||15,03+/-2,50||2,17+/-0,46||1868,57+/-42,16||0,07+/-0,25||183407,07+/-7,18||
-
-Smaller chunk size (16k)
-
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||1,50+/-0,71||292,00+/-2,83||108,50+/-2,12||1,00+/-0,00||0,50+/-0,71||0,00+/-0,00||133,00+/-4,24||0,00+/-0,00||1788158,00+/-0,00||
-||lucene null||1,50+/-0,71||322,50+/-17,68||132,00+/-2,83||1,00+/-0,00||1,00+/-0,00||0,50+/-0,71||343,00+/-8,49||0,00+/-0,00||1790965,00+/-0,00||
-||compressed||1,50+/-0,71||437,00+/-50,91||245,00+/-12,73||1,00+/-0,00||2,50+/-2,12||0,50+/-0,71||353,00+/-5,66||0,00+/-0,00||182749,00+/-4,24||
-||AES encrypted||4,50+/-0,71||462,00+/-8,49||307,00+/-24,04||1,00+/-0,00||14,00+/-5,66||9,50+/-12,02||380,00+/-8,49||0,00+/-0,00||1792868,00+/-0,00||
-||AES CBC encrypted||4,50+/-0,71||481,00+/-11,31||310,50+/-4,95||1,50+/-0,71||10,50+/-0,71||2,00+/-0,00||391,50+/-6,36||0,00+/-0,00||1792967,00+/-0,00||
-||Compressed AES CBC encrypted||4,00+/-0,00||783,00+/-21,21||714,50+/-3,54||1,00+/-0,00||11,00+/-1,41||0,00+/-0,00||351,50+/-7,78||0,00+/-0,00||183853,00+/-11,31||
-
-
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||1,57+/-2,06||309,80+/-19,85||106,17+/-4,23||1,03+/-0,18||0,37+/-0,49||0,13+/-0,35||130,60+/-13,58||0,07+/-0,25||1788158,00+/-0,00||
-||lucene null||1,63+/-2,01||330,27+/-19,00||126,63+/-2,91||1,03+/-0,18||1,17+/-1,53||0,27+/-0,45||479,20+/-20,30||0,03+/-0,18||1790964,90+/-0,31||
-||compressed||1,40+/-0,50||418,40+/-13,44||235,77+/-8,59||0,87+/-0,43||1,17+/-0,38||0,67+/-0,55||485,93+/-11,45||0,07+/-0,25||182750,63+/-2,37||
-||AES encrypted||3,83+/-0,65||456,73+/-15,77||287,10+/-14,18||1,13+/-0,43||9,80+/-1,03||1,33+/-0,48||518,07+/-21,71||0,10+/-0,31||1792867,73+/-0,45||
-||AES CBC encrypted||3,60+/-0,50||472,30+/-14,64||310,23+/-20,25||1,13+/-0,35||10,47+/-2,18||1,53+/-0,51||517,50+/-21,58||0,07+/-0,25||1792966,90+/-0,31||
-||Compressed AES CBC encrypted||4,27+/-0,64||800,73+/-67,68||733,63+/-28,63||1,00+/-0,37||9,83+/-2,15||0,47+/-0,51||496,57+/-30,58||0,00+/-0,00||183848,63+/-6,95||
-
-Small chunk size (4k)
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||1,33+/-1,15||301,60+/-15,16||108,23+/-3,62||0,97+/-0,49||0,47+/-0,51||0,13+/-0,35||123,73+/-5,46||0,03+/-0,18||1788158,00+/-0,00||
-||lucene null||1,23+/-0,43||328,60+/-18,66||131,63+/-4,09||0,90+/-0,31||0,57+/-0,50||0,37+/-0,49||338,77+/-10,21||0,13+/-0,35||1797154,93+/-0,25||
-||compressed||1,47+/-1,31||422,07+/-18,23||248,73+/-10,63||0,73+/-0,45||0,77+/-0,43||0,50+/-0,51||340,20+/-6,79||0,00+/-0,00||198893,10+/-1,77||
-||AES encrypted||3,63+/-0,49||455,50+/-26,72||286,20+/-7,77||0,97+/-0,18||8,83+/-0,83||0,67+/-0,48||367,20+/-13,34||0,03+/-0,18||1804284,00+/-0,00||
-||AES CBC encrypted||3,80+/-0,55||469,70+/-18,64||307,43+/-12,16||1,00+/-0,64||9,17+/-0,99||0,93+/-0,37||366,57+/-10,55||0,07+/-0,25||1804382,80+/-0,41||
-||Compressed AES CBC encrypted||3,93+/-0,37||560,60+/-15,13||419,07+/-13,40||0,73+/-0,45||8,83+/-0,87||0,53+/-0,51||346,43+/-12,21||0,07+/-0,25||202174,77+/-7,48||
 
 ==Transformation after close==
 It is possible to trigger transformation after directory file close. Temporary directory files are created without any application of transformation (eg. unencrypted/uncompresed) without chunking. After close operation on file is called, whole file is transformed. File close operations are also called from lucene indexer, therefore transformation can be applied during indexing.
 
 This mode guaranties best read performance, since no chunk is overwritten.
 
-If compound file format is used, usually there are only few overwritten chunks.
+In general log based writing and transformation after close approaches do not differ a lot. When using compound file, log based approach has only few overwritten chunks.
 
-Large chunk size (128k)
+If it is allowed and able (size/disk speed limitations) to write untransformed data, it is recommended to use log based approach, since most of complicated logic about merging chunks (fast) is not used when reading. 
 
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||0,93+/-0,37||302,60+/-19,74||112,83+/-18,81||1,03+/-0,41||0,40+/-0,50||0,00+/-0,00||128,30+/-10,79||0,13+/-0,35||1788158,00+/-0,00||
-||lucene null||1,80+/-0,55||326,20+/-8,98||139,67+/-5,03||1,53+/-0,51||2,67+/-0,71||0,87+/-0,35||1906,23+/-67,79||0,10+/-0,31||1788573,97+/-0,18||
-||compressed||1,83+/-0,38||434,97+/-13,34||281,30+/-11,53||1,33+/-0,48||4,23+/-1,61||1,57+/-0,68||1916,87+/-57,18||0,03+/-0,18||182935,60+/-1,61||
-||AES encrypted||4,33+/-0,71||444,57+/-14,68||294,37+/-7,57||1,67+/-0,48||17,10+/-1,71||4,43+/-0,50||1883,77+/-58,17||0,07+/-0,25||1788865,90+/-0,31||
-||AES CBC encrypted||4,47+/-0,63||467,43+/-13,47||313,30+/-8,55||1,67+/-0,48||18,27+/-1,34||4,93+/-0,52||1893,97+/-57,74||0,10+/-0,31||1788964,90+/-0,31||
-||Compressed AES CBC encrypted||4,83+/-0,70||1015,10+/-29,92||1103,70+/-33,40||1,70+/-0,53||13,03+/-1,56||1,90+/-0,40||1855,63+/-58,31||0,13+/-0,35||183191,93+/-8,06||
+As expected, chunk size has great impact. Example of performance ratio, relative to FSDirectory, when using compression log based writing and compound file:
 
+||Measurement/chunk size||  4k || 16k || 128k ||
+|| Size  || 11,12%+/-0,00%||10,22%+/-0,00%||10,24%+/-0,00%||
+|| Search time ||138,25%+/-12,32%||201,08%+/-14,57%||627,96%+/-74,86%||
+|| Indexing time ||145,09%+/-8,89%||141,39%+/-8,60%||152,81%+/-10,67%||
+|| Index optimization time||234,24%+/-16,51%||220,54%+/-32,40%||258,95%+/-16,19%||
 
-Smaller chunk size (16k)
-
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||1,03+/-0,41||301,43+/-12,69||105,63+/-4,38||0,97+/-0,18||0,40+/-0,50||0,23+/-0,43||130,73+/-12,92||0,13+/-0,35||1788158,00+/-0,00||
-||lucene null||1,33+/-0,48||320,80+/-16,35||131,43+/-4,34||1,10+/-0,31||0,77+/-0,43||0,27+/-0,45||468,27+/-8,77||0,10+/-0,31||1790775,97+/-0,18||
-||compressed||1,53+/-0,51||413,13+/-17,19||238,40+/-4,81||1,00+/-0,26||0,90+/-0,31||0,53+/-0,51||475,13+/-13,61||0,17+/-0,38||182612,50+/-2,06||
-||AES encrypted||3,77+/-0,50||457,97+/-34,63||293,23+/-17,03||1,27+/-0,45||9,53+/-1,01||1,27+/-0,45||506,90+/-19,72||0,03+/-0,18||1792603,97+/-0,18||
-||AES CBC encrypted||4,00+/-0,37||465,47+/-16,94||320,47+/-20,11||1,20+/-0,41||9,57+/-0,97||1,47+/-0,51||507,00+/-17,45||0,07+/-0,25||1792702,90+/-0,31||
-||Compressed AES CBC encrypted||4,60+/-1,22||783,97+/-30,85||732,07+/-20,56||1,20+/-0,41||8,93+/-0,58||0,77+/-0,43||492,80+/-23,25||0,07+/-0,25||183652,37+/-8,22||
-
+See [Performance_detail detailed measurements] for all comparisons.
 
 =Performance Tips=
-If indexing performance is very important, you can index directly without transformation. After index is closed, content of lucene directory can be copied from untransformed to transformed index with Lucene's Directory.copy class method.
+If indexing performance is very important, you can index directly without transformation. After index is closed, content of Lucene directory can be copied from untransformed to transformed index with Lucene's Directory.copy class method.
 
-Small chunk sizes should be avoided on large indexes due to large number of needed chunk directory entries that are loaded and kept in memory. There is also the limit of maximum number of chunks, that is limited with maximum array size 2^31-1.
+Small chunk sizes should be avoided on large indexes, due to large number of needed chunk directory entries that are loaded and kept in memory. There is also the limit of maximum number of chunks, that is limited with maximum array size 2^31-1.
 
 If performance is important, don't use compound file format.
-
-Large chunk size (128k), transformation after close, without compound file
-
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||1,20+/-1,16||294,43+/-9,94||107,47+/-12,46||1,73+/-1,28||0,60+/-0,50||0,17+/-0,38||131,03+/-12,49||0,07+/-0,25||1788037,00+/-0,00||
-||lucene null||1,97+/-1,25||304,10+/-12,37||125,70+/-6,75||2,27+/-0,52||2,40+/-1,28||0,70+/-0,47||1463,53+/-55,00||0,03+/-0,18||1788687,90+/-0,31||
-||compressed||1,87+/-0,51||358,47+/-9,69||191,40+/-4,12||1,87+/-0,35||2,80+/-0,66||1,27+/-0,52||1450,90+/-40,35||0,07+/-0,25||181280,67+/-1,77||
-||AES encrypted||4,37+/-0,67||332,30+/-9,68||231,73+/-5,51||2,13+/-0,73||33,10+/-1,88||3,27+/-0,45||1446,03+/-45,58||0,03+/-0,18||1789113,97+/-0,18||
-||AES CBC encrypted||4,33+/-0,48||332,57+/-8,22||244,53+/-5,69||2,23+/-0,82||33,97+/-2,44||3,60+/-0,50||1443,27+/-28,99||0,17+/-0,38||1789442,97+/-0,18||
-||Compressed AES CBC encrypted||4,63+/-0,49||619,20+/-22,10||635,73+/-19,47||2,17+/-0,38||31,13+/-5,37||1,70+/-1,29||1438,50+/-38,90||0,07+/-0,25||182005,77+/-7,48||
-
-Smaller chunk size (16k), transformation after close, without compound file
-
-
-||Method||WriterOpen(ms)||Indexing(ms)||Optimization(ms)||Closing(ms)||ReaderOpen(ms)||Single search(ms)||Search(ms)||ReaderClose(ms)||Size(bytes)||
-||lucene||1,30+/-2,61||306,07+/-13,61||109,80+/-13,39||1,30+/-0,47||0,47+/-0,51||0,17+/-0,38||127,43+/-5,44||0,03+/-0,18||1788037,00+/-0,00||
-||lucene null||1,30+/-0,47||311,47+/-13,75||123,50+/-5,84||1,70+/-0,53||0,83+/-0,46||0,47+/-0,51||415,30+/-9,28||0,17+/-0,38||1790853,87+/-0,35||
-||compressed||1,43+/-0,50||346,23+/-9,39||181,23+/-14,41||1,37+/-0,56||1,17+/-0,38||0,47+/-0,51||421,83+/-12,86||0,13+/-0,35||182590,93+/-1,66||
-||AES encrypted||3,97+/-0,49||334,17+/-12,23||235,77+/-14,38||1,60+/-0,56||27,67+/-1,63||1,57+/-0,57||441,73+/-14,06||0,10+/-0,31||1792812,93+/-0,25||
-||AES CBC encrypted||4,27+/-0,91||346,77+/-26,65||241,27+/-5,36||1,63+/-0,49||28,27+/-1,95||1,70+/-0,53||445,13+/-16,71||0,20+/-0,41||1793142,97+/-0,18||
-||Compressed AES CBC encrypted||4,10+/-0,55||518,43+/-32,58||454,33+/-11,59||1,53+/-0,51||27,37+/-1,79||0,63+/-0,49||426,70+/-14,22||0,17+/-0,38||183949,10+/-5,45||
