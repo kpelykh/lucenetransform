@@ -1,5 +1,5 @@
-#Changes and performance on upgrade to Lucene 4.9
-
+#summary Changes and performance on upgrade to Lucene 4.9
+ 
 =  Lucene 4.9 changes =
 
 Lucene 4.9 introduces big changes to Directory API, which simplifies implementation of transformation and ensures only sequential writes. Therefore no temporary files and copying is needed. For this reason file format has been changed and current implementation cannot read old files.  
